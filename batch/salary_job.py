@@ -1,5 +1,5 @@
 from transform.transform import calculate_salary
-from db.postgres import insert_salary
+from Vehicle_Management_System.app.db.postgres import insert_salary
 import datetime
 
 def run_salary_job(employees):

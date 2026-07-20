@@ -1,0 +1,13 @@
+psql:C:/Users/292787/AppData/Local/Temp/pg_count_rpHvNk.sql:24: NOTICE:  <NULL>
+DO
+psql:C:/Users/292787/AppData/Local/Temp/pg_count_rpHvNk.sql:25: ERROR:  syntax error at or near "echo"
+LINE 1: echo ";"
+        ^
+psql:C:/Users/292787/AppData/Local/Temp/pg_count_1GPG48.sql:24: NOTICE:  <NULL>
+DO
+DO
+psql:C:/Users/292787/AppData/Local/Temp/pg_count_ATPJfk.sql:24: ERROR:  syntax error at or near "";""
+LINE 1: ";"
+        ^
+DO
+DO

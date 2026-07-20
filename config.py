@@ -2,9 +2,9 @@ KAFKA_BROKER = "localhost:9092"
 KAFKA_TOPIC = "gps_data"
 
 POSTGRES_CONFIG = {
-    "dbname": "fleet_db",
+    "dbname": "fms",
     "user": "postgres",
-    "password": "password",
+    "password": "passw0rd",
     "host": "localhost",
     "port": 5432
 }

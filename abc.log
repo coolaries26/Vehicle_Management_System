@@ -1,0 +1,210 @@
+psql: warning: extra command-line argument "SELECT 'SELECT '''||schemaname||'.'|| tablename|| ''' as tablename ,COUNT(*) as count FROM '||schemaname||'.'|| tablename||' ;' FROM pg_tables WHERE schemaname in ('maste
+r','reference','transaction','timeseries','pharma')  group by schemaname,tablename ORDER BY tablename;
+" ignored
+psql:table_count.sql:3: ERROR:  syntax error at or near "psql"
+LINE 1: psql: warning: extra command-line argument "SELECT 'SELECT '...
+        ^
+                                                        ?column?                                                         
+-------------------------------------------------------------------------------------------------------------------------
+ SELECT 'transaction.attendance_tracking' as tablename ,COUNT(*) as count FROM transaction.attendance_tracking ;
+ SELECT 'transaction.employee_salary' as tablename ,COUNT(*) as count FROM transaction.employee_salary ;
+ SELECT 'reference.fuel_rate_reference' as tablename ,COUNT(*) as count FROM reference.fuel_rate_reference ;
+ SELECT 'transaction.fuel_transactions' as tablename ,COUNT(*) as count FROM transaction.fuel_transactions ;
+ SELECT 'timeseries.gps_raw_data' as tablename ,COUNT(*) as count FROM timeseries.gps_raw_data ;
+ SELECT 'transaction.inventory' as tablename ,COUNT(*) as count FROM transaction.inventory ;
+ SELECT 'transaction.job_card_parts' as tablename ,COUNT(*) as count FROM transaction.job_card_parts ;
+ SELECT 'transaction.maintenance_job_card' as tablename ,COUNT(*) as count FROM transaction.maintenance_job_card ;
+ SELECT 'transaction.maintenance_parts_usage' as tablename ,COUNT(*) as count FROM transaction.maintenance_parts_usage ;
+ SELECT 'reference.maintenance_type_ref' as tablename ,COUNT(*) as count FROM reference.maintenance_type_ref ;
+ SELECT 'reference.vehicle_type_ref' as tablename ,COUNT(*) as count FROM reference.vehicle_type_ref ;
+(11 rows)
+
+psql:table_count.sql:6: ERROR:  syntax error at or near "psql"
+LINE 1: psql: warning: extra command-line argument "SELECT 'SELECT '...
+        ^
+                                                        ?column?                                                         
+-------------------------------------------------------------------------------------------------------------------------
+ SELECT 'transaction.attendance_tracking' as tablename ,COUNT(*) as count FROM transaction.attendance_tracking ;
+ SELECT 'transaction.employee_salary' as tablename ,COUNT(*) as count FROM transaction.employee_salary ;
+ SELECT 'reference.fuel_rate_reference' as tablename ,COUNT(*) as count FROM reference.fuel_rate_reference ;
+ SELECT 'transaction.fuel_transactions' as tablename ,COUNT(*) as count FROM transaction.fuel_transactions ;
+ SELECT 'timeseries.gps_raw_data' as tablename ,COUNT(*) as count FROM timeseries.gps_raw_data ;
+ SELECT 'transaction.inventory' as tablename ,COUNT(*) as count FROM transaction.inventory ;
+ SELECT 'transaction.job_card_parts' as tablename ,COUNT(*) as count FROM transaction.job_card_parts ;
+ SELECT 'transaction.maintenance_job_card' as tablename ,COUNT(*) as count FROM transaction.maintenance_job_card ;
+ SELECT 'transaction.maintenance_parts_usage' as tablename ,COUNT(*) as count FROM transaction.maintenance_parts_usage ;
+ SELECT 'reference.maintenance_type_ref' as tablename ,COUNT(*) as count FROM reference.maintenance_type_ref ;
+ SELECT 'reference.vehicle_type_ref' as tablename ,COUNT(*) as count FROM reference.vehicle_type_ref ;
+(11 rows)
+
+psql:table_count.sql:3: ERROR:  syntax error at or near "?"
+LINE 1: ?column?                                                    ...
+        ^
+SELECT 'SELECT '''||schemaname||'.'|| tablename|| ''' as tablename ,COUNT(*) as count FROM '||schemaname||'.'|| tablename||' ;' FROM pg_tables WHERE schemaname in ('maste
+r','reference','transaction','timeseries','pharma')  group by schemaname,tablename ORDER BY tablename;
+
+ SELECT 'transaction.attendance_tracking' as tablename ,COUNT(*) as count FROM transaction.attendance_tracking ;
+ SELECT 'transaction.employee_salary' as tablename ,COUNT(*) as count FROM transaction.employee_salary ;
+ SELECT 'reference.fuel_rate_reference' as tablename ,COUNT(*) as count FROM reference.fuel_rate_reference ;
+ SELECT 'transaction.fuel_transactions' as tablename ,COUNT(*) as count FROM transaction.fuel_transactions ;
+ SELECT 'timeseries.gps_raw_data' as tablename ,COUNT(*) as count FROM timeseries.gps_raw_data ;
+ SELECT 'transaction.inventory' as tablename ,COUNT(*) as count FROM transaction.inventory ;
+ SELECT 'transaction.job_card_parts' as tablename ,COUNT(*) as count FROM transaction.job_card_parts ;
+ SELECT 'transaction.maintenance_job_card' as tablename ,COUNT(*) as count FROM transaction.maintenance_job_card ;
+ SELECT 'transaction.maintenance_parts_usage' as tablename ,COUNT(*) as count FROM transaction.maintenance_parts_usage ;
+ SELECT 'reference.maintenance_type_ref' as tablename ,COUNT(*) as count FROM reference.maintenance_type_ref ;
+ SELECT 'reference.vehicle_type_ref' as tablename ,COUNT(*) as count FROM reference.vehicle_type_ref ;
+
+psql: error: connection to server at "localhost" (::1), port 5432 failed: FATAL:  password authentication failed for user "postgres"
+SELECT 'SELECT '''||schemaname||'.'|| tablename|| ''' as tablename ,COUNT(*) as count FROM '||schemaname||'.'|| tablename||' ;' FROM pg_tables WHERE schemaname in ('maste
+r','reference','transaction','timeseries','pharma')  group by schemaname,tablename ORDER BY tablename;
+
+ SELECT 'transaction.attendance_tracking' as tablename ,COUNT(*) as count FROM transaction.attendance_tracking ;
+ SELECT 'transaction.employee_salary' as tablename ,COUNT(*) as count FROM transaction.employee_salary ;
+ SELECT 'reference.fuel_rate_reference' as tablename ,COUNT(*) as count FROM reference.fuel_rate_reference ;
+ SELECT 'transaction.fuel_transactions' as tablename ,COUNT(*) as count FROM transaction.fuel_transactions ;
+ SELECT 'timeseries.gps_raw_data' as tablename ,COUNT(*) as count FROM timeseries.gps_raw_data ;
+ SELECT 'transaction.inventory' as tablename ,COUNT(*) as count FROM transaction.inventory ;
+ SELECT 'transaction.job_card_parts' as tablename ,COUNT(*) as count FROM transaction.job_card_parts ;
+ SELECT 'transaction.maintenance_job_card' as tablename ,COUNT(*) as count FROM transaction.maintenance_job_card ;
+ SELECT 'transaction.maintenance_parts_usage' as tablename ,COUNT(*) as count FROM transaction.maintenance_parts_usage ;
+ SELECT 'reference.maintenance_type_ref' as tablename ,COUNT(*) as count FROM reference.maintenance_type_ref ;
+ SELECT 'reference.vehicle_type_ref' as tablename ,COUNT(*) as count FROM reference.vehicle_type_ref ;
+
+psql:table_count.sql:3: ERROR:  syntax error at or near "?"
+LINE 1: ?column?                                                    ...
+        ^
+SELECT 'SELECT '''||schemaname||'.'|| tablename|| ''' as tablename ,COUNT(*) as count FROM '||schemaname||'.'|| tablename||' ;' FROM pg_tables WHERE schemaname in ('maste
+r','reference','transaction','timeseries','pharma')  group by schemaname,tablename ORDER BY tablename;
+
+ SELECT 'transaction.attendance_tracking' as tablename ,COUNT(*) as count FROM transaction.attendance_tracking ;
+ SELECT 'transaction.employee_salary' as tablename ,COUNT(*) as count FROM transaction.employee_salary ;
+ SELECT 'reference.fuel_rate_reference' as tablename ,COUNT(*) as count FROM reference.fuel_rate_reference ;
+ SELECT 'transaction.fuel_transactions' as tablename ,COUNT(*) as count FROM transaction.fuel_transactions ;
+ SELECT 'timeseries.gps_raw_data' as tablename ,COUNT(*) as count FROM timeseries.gps_raw_data ;
+ SELECT 'transaction.inventory' as tablename ,COUNT(*) as count FROM transaction.inventory ;
+ SELECT 'transaction.job_card_parts' as tablename ,COUNT(*) as count FROM transaction.job_card_parts ;
+ SELECT 'transaction.maintenance_job_card' as tablename ,COUNT(*) as count FROM transaction.maintenance_job_card ;
+ SELECT 'transaction.maintenance_parts_usage' as tablename ,COUNT(*) as count FROM transaction.maintenance_parts_usage ;
+ SELECT 'reference.maintenance_type_ref' as tablename ,COUNT(*) as count FROM reference.maintenance_type_ref ;
+ SELECT 'reference.vehicle_type_ref' as tablename ,COUNT(*) as count FROM reference.vehicle_type_ref ;
+
+                                                        ?column?                                                         
+-------------------------------------------------------------------------------------------------------------------------
+ SELECT 'transaction.attendance_tracking' as tablename ,COUNT(*) as count FROM transaction.attendance_tracking ;
+ SELECT 'transaction.employee_salary' as tablename ,COUNT(*) as count FROM transaction.employee_salary ;
+ SELECT 'reference.fuel_rate_reference' as tablename ,COUNT(*) as count FROM reference.fuel_rate_reference ;
+ SELECT 'transaction.fuel_transactions' as tablename ,COUNT(*) as count FROM transaction.fuel_transactions ;
+ SELECT 'timeseries.gps_raw_data' as tablename ,COUNT(*) as count FROM timeseries.gps_raw_data ;
+ SELECT 'transaction.inventory' as tablename ,COUNT(*) as count FROM transaction.inventory ;
+ SELECT 'transaction.job_card_parts' as tablename ,COUNT(*) as count FROM transaction.job_card_parts ;
+ SELECT 'transaction.maintenance_job_card' as tablename ,COUNT(*) as count FROM transaction.maintenance_job_card ;
+ SELECT 'transaction.maintenance_parts_usage' as tablename ,COUNT(*) as count FROM transaction.maintenance_parts_usage ;
+ SELECT 'reference.maintenance_type_ref' as tablename ,COUNT(*) as count FROM reference.maintenance_type_ref ;
+ SELECT 'reference.vehicle_type_ref' as tablename ,COUNT(*) as count FROM reference.vehicle_type_ref ;
+(11 rows)
+
+            tablename            | count 
+---------------------------------+-------
+ transaction.attendance_tracking |     0
+(1 row)
+
+          tablename          | count 
+-----------------------------+-------
+ transaction.employee_salary |     0
+(1 row)
+
+           tablename           | count 
+-------------------------------+-------
+ reference.fuel_rate_reference |     0
+(1 row)
+
+           tablename           | count 
+-------------------------------+-------
+ transaction.fuel_transactions |     0
+(1 row)
+
+        tablename        | count 
+-------------------------+-------
+ timeseries.gps_raw_data |     0
+(1 row)
+
+       tablename       | count 
+-----------------------+-------
+ transaction.inventory |     0
+(1 row)
+
+         tablename          | count 
+----------------------------+-------
+ transaction.job_card_parts |     0
+(1 row)
+
+            tablename             | count 
+----------------------------------+-------
+ transaction.maintenance_job_card |     0
+(1 row)
+
+              tablename              | count 
+-------------------------------------+-------
+ transaction.maintenance_parts_usage |     0
+(1 row)
+
+           tablename            | count 
+--------------------------------+-------
+ reference.maintenance_type_ref |     0
+(1 row)
+
+         tablename          | count 
+----------------------------+-------
+ reference.vehicle_type_ref |     0
+(1 row)
+
+stdout is not a tty
+SELECT 'SELECT '''||schemaname||'.'|| tablename|| ''' as tablename ,COUNT(*) as count FROM '||schemaname||'.'|| tablename||' union all ' FROM pg_tables WHERE schemaname in ('maste
+r','reference','transaction','timeseries','pharma')  group by schemaname,tablename ORDER BY tablename;
+
+ SELECT 'transaction.attendance_tracking' as tablename ,COUNT(*) as count FROM transaction.attendance_tracking union all 
+ SELECT 'transaction.employee_salary' as tablename ,COUNT(*) as count FROM transaction.employee_salary union all 
+ SELECT 'reference.fuel_rate_reference' as tablename ,COUNT(*) as count FROM reference.fuel_rate_reference union all 
+ SELECT 'transaction.fuel_transactions' as tablename ,COUNT(*) as count FROM transaction.fuel_transactions union all 
+ SELECT 'timeseries.gps_raw_data' as tablename ,COUNT(*) as count FROM timeseries.gps_raw_data union all 
+ SELECT 'transaction.inventory' as tablename ,COUNT(*) as count FROM transaction.inventory union all 
+ SELECT 'transaction.job_card_parts' as tablename ,COUNT(*) as count FROM transaction.job_card_parts union all 
+ SELECT 'transaction.maintenance_job_card' as tablename ,COUNT(*) as count FROM transaction.maintenance_job_card union all 
+ SELECT 'transaction.maintenance_parts_usage' as tablename ,COUNT(*) as count FROM transaction.maintenance_parts_usage union all 
+ SELECT 'reference.maintenance_type_ref' as tablename ,COUNT(*) as count FROM reference.maintenance_type_ref union all 
+ SELECT 'reference.vehicle_type_ref' as tablename ,COUNT(*) as count FROM reference.vehicle_type_ref union all 
+
+              tablename              | count 
+-------------------------------------+-------
+ transaction.attendance_tracking     |     0
+ transaction.employee_salary         |     0
+ reference.fuel_rate_reference       |     0
+ transaction.fuel_transactions       |     0
+ timeseries.gps_raw_data             |     0
+ transaction.inventory               |     0
+ transaction.job_card_parts          |     0
+ transaction.maintenance_job_card    |     0
+ transaction.maintenance_parts_usage |     0
+ reference.maintenance_type_ref      |     0
+ reference.vehicle_type_ref          |     0
+(11 rows)
+
+                                                             ?column?                                                             
+----------------------------------------------------------------------------------------------------------------------------------
+ SELECT 'transaction.attendance_tracking' as tablename ,COUNT(*) as count FROM transaction.attendance_tracking union all 
+ SELECT 'transaction.employee_salary' as tablename ,COUNT(*) as count FROM transaction.employee_salary union all 
+ SELECT 'reference.fuel_rate_reference' as tablename ,COUNT(*) as count FROM reference.fuel_rate_reference union all 
+ SELECT 'transaction.fuel_transactions' as tablename ,COUNT(*) as count FROM transaction.fuel_transactions union all 
+ SELECT 'timeseries.gps_raw_data' as tablename ,COUNT(*) as count FROM timeseries.gps_raw_data union all 
+ SELECT 'transaction.inventory' as tablename ,COUNT(*) as count FROM transaction.inventory union all 
+ SELECT 'transaction.job_card_parts' as tablename ,COUNT(*) as count FROM transaction.job_card_parts union all 
+ SELECT 'transaction.maintenance_job_card' as tablename ,COUNT(*) as count FROM transaction.maintenance_job_card union all 
+ SELECT 'transaction.maintenance_parts_usage' as tablename ,COUNT(*) as count FROM transaction.maintenance_parts_usage union all 
+ SELECT 'reference.maintenance_type_ref' as tablename ,COUNT(*) as count FROM reference.maintenance_type_ref union all 
+ SELECT 'reference.vehicle_type_ref' as tablename ,COUNT(*) as count FROM reference.vehicle_type_ref union all 
+(11 rows)
+
+psql:table_count.sql:37: ERROR:  syntax error at end of input
+LINE 13: 
+         ^

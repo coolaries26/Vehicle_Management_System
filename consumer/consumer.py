@@ -2,7 +2,7 @@ from kafka import KafkaConsumer
 import json
 from config import KAFKA_TOPIC, KAFKA_BROKER
 from transform.transform import process_gps_data, process_fuel_data, process_maintenance
-from db.postgres import insert_gps, insert_fuel, insert_maintenance
+from Vehicle_Management_System.app.db.postgres import insert_gps, insert_fuel, insert_maintenance
 from alerts.alerts import check_alerts
 
 consumer = KafkaConsumer(

@@ -23,6 +23,22 @@
 ***
 
 ## ✅ Install Core Dependencies
+## ✅ 2.1 Recommended Stable Stack (Tested Together)
+
+| Component    | Version           |
+| ------------ | ----------------- |
+| Python       | ✅ **3.9 or 3.10** |
+| Kafka        | ✅ 3.3 – 3.6       |
+| psycopg2     | ✅ latest          |
+| kafka-python | ✅ 2.0.x           |
+| FastAPI      | ✅ 0.100+          |
+| uvicorn      | ✅ 0.22+           |
+| dbt-postgres | ✅ 1.5 – 1.7       |
+| Airflow      | ✅ 2.6 – 2.8       |
+| Streamlit    | ✅ 1.30+           |
+
+***
+
 
 ```bash
 sudo apt update
@@ -56,14 +72,14 @@ sudo -u postgres psql
 ```
 
 ```sql
-CREATE DATABASE fleet_db;
+CREATE DATABASE fms;
 
-CREATE USER fleet_user WITH PASSWORD 'password';
+CREATE USER fleet_user WITH PASSWORD 'FleetUser@2024!';
 
 ALTER ROLE fleet_user SET client_encoding TO 'utf8';
 ALTER ROLE fleet_user SET default_transaction_isolation TO 'read committed';
 
-GRANT ALL PRIVILEGES ON DATABASE fleet_db TO fleet_user;
+GRANT ALL PRIVILEGES ON DATABASE fms TO fleet_user;
 ```
 
 ***
@@ -249,21 +265,6 @@ Yes — **version compatibility is VERY important**, especially with:
 * Python
 * Kafka client libs
 
-## ✅ 2.1 Recommended Stable Stack (Tested Together)
-
-| Component    | Version           |
-| ------------ | ----------------- |
-| Python       | ✅ **3.9 or 3.10** |
-| Kafka        | ✅ 3.3 – 3.6       |
-| psycopg2     | ✅ latest          |
-| kafka-python | ✅ 2.0.x           |
-| FastAPI      | ✅ 0.100+          |
-| uvicorn      | ✅ 0.22+           |
-| dbt-postgres | ✅ 1.5 – 1.7       |
-| Airflow      | ✅ 2.6 – 2.8       |
-| Streamlit    | ✅ 1.30+           |
-
-***
 
 ## ⚠️ IMPORTANT Compatibility Notes
 
