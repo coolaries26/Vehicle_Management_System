@@ -53,9 +53,58 @@ class JobCardService:
                 payload.description,
                 modified_by=
                 user_id,
+                driver_id=payload.driver_id,
+                technician1_id=payload.technician1_id,
+                technician2_id=payload.technician2_id,
+                date_time_in=payload.date_time_in,
+                date_time_out=payload.date_time_out,
+                zone_area=payload.zone_area,
+
+                mileage_hours=payload.mileage_hours,
+                maintenance_type=payload.maintenance_type,
+                issue_reported=payload.issue_reported,
+                problem_found_action_taken=payload.problem_found_action_taken,
+                requisition_slip_number=payload.requisition_slip_number,
+
             )
         )
 
+        if payload.driver_id is not None:
+            jobcard.driver_id = payload.driver_id
+        
+        if payload.technician1_id is not None:
+            jobcard.technician1_id = payload.technician1_id
+        
+        if payload.technician2_id is not None:
+            jobcard.technician2_id = payload.technician2_id
+        
+        if payload.date_time_in is not None:
+            jobcard.date_time_in = payload.date_time_in
+        
+        if payload.date_time_out is not None:
+            jobcard.date_time_out = payload.date_time_out
+        
+        if payload.zone_area is not None:
+            jobcard.zone_area = payload.zone_area
+        
+        if payload.mileage_hours is not None:
+            jobcard.mileage_hours = payload.mileage_hours
+        
+        if payload.maintenance_type is not None:
+            jobcard.maintenance_type = payload.maintenance_type
+        
+        if payload.issue_reported is not None:
+            jobcard.issue_reported = payload.issue_reported
+        
+        if payload.problem_found_action_taken is not None:
+            jobcard.problem_found_action_taken = (
+                payload.problem_found_action_taken
+            )
+        
+        if payload.requisition_slip_number is not None:
+            jobcard.requisition_slip_number = (
+                payload.requisition_slip_number
+            )
         return (
             self.jobcard_repo
             .create(

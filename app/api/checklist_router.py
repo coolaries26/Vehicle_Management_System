@@ -1,5 +1,5 @@
-from fastapi import APIRouter
-from fastapi import Depends
+from fastapi import APIRouter   #type: ignore
+from fastapi import Depends     #type: ignore
 from sqlalchemy.orm import Session
 
 from app.db.dependencies import get_db

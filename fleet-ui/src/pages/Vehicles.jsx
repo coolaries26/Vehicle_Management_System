@@ -361,7 +361,7 @@ const Vehicles = () => {
           dataSource={filteredVehicles}
           scroll={{ x: 1500 }}
           size="middle"
-          bordered
+          variant
           pagination={tablePagination}
         />
       </Card>

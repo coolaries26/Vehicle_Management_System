@@ -1,4 +1,5 @@
 
+from datetime import datetime
 from sqlalchemy import Boolean, ForeignKey
 from sqlalchemy import Text, String, Numeric
 from sqlalchemy.orm import Mapped
@@ -137,33 +138,59 @@ class MaintenanceJobCard(
     __table_args__ = {"schema": "transact"}
 
     job_card_id: Mapped[int] = mapped_column(primary_key=True)
-
     complaint_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            "maintenance.vehicle_complaint.complaint_id"
-        ),nullable=False
+        ForeignKey("maintenance.vehicle_complaint.complaint_id"),nullable=False
+    )
+    inspection_id: Mapped[int] = mapped_column(
+        ForeignKey("maintenance.technician_inspection.inspection_id"),nullable=False
+    )
+    vehicle_id: Mapped[int] = mapped_column(
+        ForeignKey("master.vehicle_master.vehicle_id"),nullable=False
+    )
+    labour_charges: Mapped[float | None] = mapped_column(Numeric(12, 2)
+    )
+    description: Mapped[str | None] = mapped_column(Text,nullable=True
+    )
+    driver_id: Mapped[int | None] = mapped_column(
+        ForeignKey("master.driver_master.driver_id")
     )
 
-    inspection_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            "maintenance.technician_inspection.inspection_id"
-        ),nullable=False
+    technician1_id: Mapped[int | None] = mapped_column(
+        ForeignKey("master.employee_master.employee_id")
     )
-    
-    vehicle_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            "master.vehicle_master.vehicle_id"
-        ),nullable=False
+
+    technician2_id: Mapped[int | None] = mapped_column(
+        ForeignKey("master.employee_master.employee_id")
     )
-    labour_charges: Mapped[float | None] = mapped_column(
-    Numeric(12, 2)
+
+    date_time_in: Mapped[datetime | None]
+
+    date_time_out: Mapped[datetime | None]
+
+    zone_area: Mapped[str | None] = mapped_column(
+        String(200)
     )
-    
-    description: Mapped[str | None] = mapped_column(
-        Text,
-        nullable=True
+
+    mileage_hours: Mapped[str | None] = mapped_column(
+        String(100)
     )
-    
+
+    maintenance_type: Mapped[str | None] = mapped_column(
+        String(50)
+    )
+
+    issue_reported: Mapped[str | None] = mapped_column(
+        Text
+    )
+
+    problem_found_action_taken: Mapped[
+        str | None
+    ] = mapped_column(Text)
+
+    requisition_slip_number: Mapped[
+        str | None
+    ] = mapped_column(String(100))
+
     active_flag: Mapped[bool | None] = mapped_column(
         Boolean,
         default=True,
@@ -247,49 +274,23 @@ class PreventiveMaintenanceChecklist(
     AuditMixin,
     TimestampMixin,
 ):
-
-    __tablename__ = (
-        "preventive_maintenance_checklist"
-    )
-
-    __table_args__ = {
-        "schema": "maintenance"
-    }
-
-    checklist_id: Mapped[int] = mapped_column(
-        primary_key=True
-    )
-
+    __tablename__ = ("preventive_maintenance_checklist")
+    __table_args__ = {"schema": "maintenance"}
+    checklist_id: Mapped[int] = mapped_column(primary_key=True)
     vehicle_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            "master.vehicle_master.vehicle_id"
-        ),nullable=False
-    )
-
+        ForeignKey("master.vehicle_master.vehicle_id"),nullable=False)
     technician_id: Mapped[int] = mapped_column(
-        ForeignKey(
-            "master.employee_master.employee_id"
-        ),nullable=False
-    )
-
-    observation: Mapped[str | None] = mapped_column(
-        Text
-    )
-    vehicle = relationship(
-    "VehicleMaster",
-    back_populates="pm_checklists"
-    )
+        ForeignKey("master.employee_master.employee_id"),nullable=False)
+    observation: Mapped[str | None] = mapped_column(Text)
+    vehicle = relationship("VehicleMaster",back_populates="pm_checklists")
     issue_found: Mapped[bool | None]
-
-    issue_description: Mapped[str | None] = (
-        mapped_column(Text)
+    issue_description: Mapped[str | None] = (mapped_column(Text))
+    maintenance_action: Mapped[str | None] = mapped_column(Text)
+    active_flag: Mapped[bool | None] = mapped_column(
+        Boolean,
+        default=True,
+        nullable=True,
     )
 
-    maintenance_action: Mapped[
-        str | None
-    ] = mapped_column(Text)
-
-    final_status: Mapped[
-        str | None
-    ] = mapped_column(String(30))
+    final_status: Mapped[    str | None] = mapped_column(String(30))
 

@@ -1000,6 +1000,73 @@ JOIN master.driver_master d
 JOIN master.vehicle_master v
     ON a.vehicle_id = v.vehicle_id;
 
+CREATE OR REPLACE FUNCTION audit.log_changes()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $function$
+DECLARE
+    v_record_id TEXT;
+BEGIN
+    IF TG_OP = 'DELETE' THEN
+        v_record_id :=
+            COALESCE(
+                to_jsonb(OLD)->>'vehicle_id',
+                to_jsonb(OLD)->>'employee_id',
+                to_jsonb(OLD)->>'driver_id',
+                to_jsonb(OLD)->>'complaint_id',
+                to_jsonb(OLD)->>'inspection_id',
+                to_jsonb(OLD)->>'job_card_id',
+                to_jsonb(OLD)->>'checklist_id',
+                to_jsonb(OLD)->>'part_id',
+                to_jsonb(OLD)->>'id'
+            );
+    ELSE
+        v_record_id :=
+            COALESCE(
+                to_jsonb(NEW)->>'vehicle_id',
+                to_jsonb(NEW)->>'employee_id',
+                to_jsonb(NEW)->>'driver_id',
+                to_jsonb(NEW)->>'complaint_id',
+                to_jsonb(NEW)->>'inspection_id',
+                to_jsonb(NEW)->>'job_card_id',
+                to_jsonb(NEW)->>'checklist_id',
+                to_jsonb(NEW)->>'part_id',
+                to_jsonb(NEW)->>'id'
+            );
+    END IF;
+    INSERT INTO audit.audit_log
+    (
+        schema_name,
+        table_name,
+        record_id,
+        operation,
+        old_data,
+        new_data,
+        changed_by,
+        changed_at
+    )
+    VALUES
+    (
+        TG_TABLE_SCHEMA,
+        TG_TABLE_NAME,
+        v_record_id,
+        TG_OP,
+        CASE
+            WHEN TG_OP = 'INSERT'
+            THEN NULL
+            ELSE to_jsonb(OLD)
+        END,
+        CASE
+            WHEN TG_OP = 'DELETE'
+            THEN NULL
+            ELSE to_jsonb(NEW)
+        END,
+        NULL,
+        CURRENT_TIMESTAMP
+    );
+    RETURN COALESCE(NEW, OLD);
+END;
+$function$;
 
 -- adding constriants for fk integrity
 ALTER TABLE transact.maintenance_job_card
@@ -1037,6 +1104,54 @@ ALTER COLUMN part_id SET NOT NULL;
 
 ALTER TABLE maintenance.preventive_maintenance_checklist
 ALTER COLUMN vehicle_id SET NOT NULL;
+-- adding column for enhaning job card 
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN driver_id INTEGER;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN technician1_id INTEGER;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN technician2_id INTEGER;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN date_time_in TIMESTAMP;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN date_time_out TIMESTAMP;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN zone_area VARCHAR(200);
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN mileage_hours VARCHAR(100);
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN maintenance_type VARCHAR(50);
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN issue_reported TEXT;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN problem_found_action_taken TEXT;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN requisition_slip_number VARCHAR(100);
+-- adding fk for job card new columns
+ALTER TABLE transact.maintenance_job_card
+ADD CONSTRAINT fk_jobcard_driver
+FOREIGN KEY (driver_id)
+REFERENCES master.driver_master(driver_id);
+
+ALTER TABLE transact.maintenance_job_card
+ADD CONSTRAINT fk_jobcard_technician1
+FOREIGN KEY (technician1_id)
+REFERENCES master.employee_master(employee_id);
+
+ALTER TABLE transact.maintenance_job_card
+ADD CONSTRAINT fk_jobcard_technician2
+FOREIGN KEY (technician2_id)
+REFERENCES master.employee_master(employee_id);
 
 -- adding column for auditing
 ALTER TABLE maintenance.technician_inspection
@@ -1259,6 +1374,68 @@ CREATE TRIGGER trg_whatsapp_message_log_modified_at
 BEFORE UPDATE ON integration.whatsapp_message_log
 FOR EACH ROW
 EXECUTE FUNCTION audit.set_modified_at();
+-- triger for updating audit log 
+--vehicle
+CREATE TRIGGER trg_vehicle_master_audit
+AFTER INSERT OR UPDATE OR DELETE
+ON master.vehicle_master
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+-- employee
+CREATE TRIGGER trg_employee_master_audit
+AFTER INSERT OR UPDATE OR DELETE
+ON master.employee_master
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+-- driver
+CREATE TRIGGER trg_driver_master_audit
+AFTER INSERT OR UPDATE OR DELETE
+ON master.driver_master
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+-- part
+CREATE TRIGGER trg_part_master_audit
+AFTER INSERT OR UPDATE OR DELETE
+ON inventory.part_master
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+--vehicle_complaint
+CREATE TRIGGER trg_vehicle_complaint
+AFTER INSERT OR UPDATE OR DELETE
+ON maintenance.vehicle_complaint
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+--maintenance.technician_inspection
+CREATE TRIGGER trg_technician_inspection
+AFTER INSERT OR UPDATE OR DELETE
+ON maintenance.technician_inspection
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+--maintenance.preventive_maintenance_checklist
+CREATE TRIGGER trg_preventive_maintenance_checklist
+AFTER INSERT OR UPDATE OR DELETE
+ON maintenance.preventive_maintenance_checklist
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+--transact.maintenance_job_card
+CREATE TRIGGER trg_maintenance_job_card
+AFTER INSERT OR UPDATE OR DELETE
+ON transact.maintenance_job_card
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+--maintenance.job_card_part
+CREATE TRIGGER trg_job_card_part
+AFTER INSERT OR UPDATE OR DELETE
+ON maintenance.job_card_part
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+--inventory.part_master
+CREATE TRIGGER trg_part_master
+AFTER INSERT OR UPDATE OR DELETE
+ON inventory.part_master
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+
 
 --  CREATE TABLE IF NOT EXISTS master.fuel_station
 

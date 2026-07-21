@@ -13,6 +13,7 @@ from app.api.checklist_router import ( router as checklist_router )
 from app.api.inspection_router import ( router as inspection_router )
 from app.api.part_router import ( router as part_router )
 from app.core.exception_handlers import ( register_exception_handlers,)
+from app.api.audit_router import ( router as audit_router,)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -56,3 +57,4 @@ app.include_router(    inspection_router)
 app.include_router(    jobcard_router)
 app.include_router(    jobcard_part_router)
 app.include_router(    checklist_router)
+app.include_router(    audit_router)

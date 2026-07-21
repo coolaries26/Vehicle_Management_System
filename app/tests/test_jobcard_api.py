@@ -79,13 +79,18 @@ def create_jobcard():
     vehicle = create_vehicle()
     complaint = create_complaint()
     inspection =  create_inspection()
+    driver = create_driver()
+    trchnician = create_employee()
     assert vehicle["vehicle_id"] is not None
     assert complaint["complaint_id"] is not None
     assert inspection["inspection_id"] is not None
     payload={
         "complaint_id": complaint["complaint_id"],
         "inspection_id": inspection["inspection_id"],
-        "vehicle_id": vehicle["vehicle_id"]
+        "vehicle_id": vehicle["vehicle_id"],
+        "driver_id": driver["driver_id"],
+        "technician_id": trchnician["employee_id"],
+        "maintenance_type": "PREVENTIVE",
     }
     response = client.post("/api/v1/jobcards", json=payload )
     assert response.status_code == 201
@@ -95,13 +100,20 @@ def test_create_jobcard():
     vehicle = create_vehicle()
     complaint = create_complaint()
     inspection =  create_inspection()
+    driver = create_driver()
+    technician = create_employee()
     assert vehicle["vehicle_id"] is not None
     assert complaint["complaint_id"] is not None
     assert inspection["inspection_id"] is not None
+    assert driver["driver_id"] is not None
+    assert technician["employee_id"] is not None
     payload={
         "complaint_id": complaint["complaint_id"],
         "inspection_id": inspection["inspection_id"],
-        "vehicle_id": vehicle["vehicle_id"]
+        "vehicle_id": vehicle["vehicle_id"],
+        "driver_id": driver["driver_id"],
+        "technician_id": technician["employee_id"],
+        "maintenance_type": "PREVENTIVE",
     }
     response = client.post("/api/v1/jobcards", json=payload )
     assert response.status_code == 201
@@ -150,6 +162,7 @@ def test_update_jobcard():
     )
     assert response.status_code == 200
     body = response.json()
+    
     assert (
         body["job_card_id"]
         == job_card_id
@@ -200,4 +213,61 @@ def test_delete_jobcard_not_found():
     )
     assert response.status_code == 404
 
+def test_create_jobcard_extended_fields():
+
+    vehicle = create_vehicle()
+    complaint = create_complaint()
+    inspection =  create_inspection()
+    driver = create_driver()
+    technician = create_employee()
+    assert vehicle["vehicle_id"] is not None
+    assert complaint["complaint_id"] is not None
+    assert inspection["inspection_id"] is not None
+    assert driver["driver_id"] is not None
+    assert technician["employee_id"] is not None
+    payload={
+        "complaint_id": complaint["complaint_id"],
+        "inspection_id": inspection["inspection_id"],
+        "vehicle_id": vehicle["vehicle_id"],
+        "driver_id": driver["driver_id"],
+        "technician1_id": technician["employee_id"],
+        "technician2_id": technician["employee_id"],
+    
+        "maintenance_type": "PREVENTIVE",
+
+        "zone_area": "Zone A",
+
+        "mileage_hours": "15000",
+
+        "issue_reported": "Brake Issue",
+
+        "problem_found_action_taken":
+            "Brake pads replaced",
+
+        "requisition_slip_number":
+            "REQ-1001",
+    }
+
+    response = client.post(
+        "/api/v1/jobcards",
+        json=payload,
+    )
+
+    assert response.status_code == 201
+
+    result = response.json()
+    print(f'create driver: {driver["driver_id"]}')
+    print(f'payload driver: {payload["driver_id"]}')
+    print(result)
+    assert result["driver_id"] == driver["driver_id"]
+
+    assert (
+        result["maintenance_type"]
+        == "PREVENTIVE"
+    )
+
+    assert (
+        result["requisition_slip_number"]
+        == "REQ-1001"
+    )
 

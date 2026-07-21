@@ -15,6 +15,18 @@ class JobCardCreate(BaseModel):
     labour_charges: float | None = None
     description: str | None = None
     active_flag: bool | None = True
+#job card enhanement
+    driver_id: int | None = None
+    technician1_id: int | None = None
+    technician2_id: int | None = None
+    date_time_in: datetime | None = None
+    date_time_out: datetime | None = None
+    zone_area: str | None = None
+    mileage_hours: str | None = None
+    maintenance_type: str | None = None
+    issue_reported: str | None = None
+    problem_found_action_taken: str | None = None
+    requisition_slip_number: str | None = None
 
 #Update
 class JobCardUpdate(BaseModel):
@@ -26,6 +38,19 @@ class JobCardUpdate(BaseModel):
     downtime_hours: float | None = None
     completion_date: date | None = None
     active_flag: bool | None = True
+# Job card enhancement
+    driver_id: int | None = None
+    technician1_id: int | None = None
+    technician2_id: int | None = None
+    date_time_in: datetime | None = None
+    date_time_out: datetime | None = None
+    zone_area: str | None = None
+    mileage_hours: str | None = None
+    maintenance_type: str | None = None
+    issue_reported: str | None = None
+    problem_found_action_taken: str | None = None
+    requisition_slip_number: str | None = None
+
 
 
 #Response
@@ -50,3 +75,15 @@ class JobCardResponse(BaseModel):
     created_at: datetime | None = None
     modified_by: int | None = None
     modified_at: datetime | None = None
+# Job card enhancement
+    driver_id: int | None = None
+    technician1_id: int | None = None
+    technician2_id: int | None = None
+    date_time_in: datetime | None = None
+    date_time_out: datetime | None = None
+    zone_area: str | None = None
+    mileage_hours: str | None = None
+    maintenance_type: str | None = None
+    issue_reported: str | None = None
+    problem_found_action_taken: str | None = None
+    requisition_slip_number: str | None = None

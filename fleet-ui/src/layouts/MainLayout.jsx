@@ -6,6 +6,7 @@ import {
   TeamOutlined,
   ToolOutlined,
   FileTextOutlined,
+  AuditOutlined,
 } from "@ant-design/icons";
 import { Link, Outlet, useLocation } from "react-router-dom";
 
@@ -65,6 +66,16 @@ const MainLayout = () => {
       key: "/jobcard-parts",
       icon: <ToolOutlined />,
       label: (<Link to="/jobcardparts">Job Card Parts</Link>),
+    },
+    {
+      key: "/checklists",
+      icon: <ToolOutlined />,
+      label: (<Link to="/checklists">Checklists</Link>),
+    },
+    {
+      key: "/audit-logs",
+      icon: <AuditOutlined />,
+      label: (<Link to="/audit-logs">Audit Logs</Link>),
     },
   ];
 

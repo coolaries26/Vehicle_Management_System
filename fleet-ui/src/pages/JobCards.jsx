@@ -18,35 +18,28 @@ import {
   Typography,
   message,
   Select,
+  DatePicker,
 } from "antd";
 
 import {
   DeleteOutlined,
   EditOutlined,
 } from "@ant-design/icons";
-
-import SearchToolbar from "../components/SearchToolbar";
-
-import tablePagination from "../utils/tablePagination";
-
 import {
   getJobCards,
   createJobCard,
   updateJobCard,
   deactivateJobCard,
 } from "../services/jobCardService";
+import dayjs from "dayjs";
+import SearchToolbar from "../components/SearchToolbar";
+import tablePagination from "../utils/tablePagination";
+import {  getVehicles,} from "../services/vehicleService";
+import {  getComplaints,} from "../services/complaintService";
+import {  getInspections,} from "../services/inspectionService";
+import {  getDrivers,} from "../services/driverService";
 
-import {
-  getVehicles,
-} from "../services/vehicleService";
-
-import {
-  getComplaints,
-} from "../services/complaintService";
-
-import {
-  getInspections,
-} from "../services/inspectionService";
+import {  getEmployees,} from "../services/employeeService";
 
 const { Title } = Typography;
 
@@ -81,7 +74,10 @@ const JobCards = () => {
   const [statusFilter,
     setStatusFilter] =
     useState("ALL");
-
+  const [drivers, setDrivers] =
+    useState([]);    
+  const [employees, setEmployees] =
+    useState([]);
   const [form] =
     Form.useForm();
 
@@ -97,13 +93,16 @@ const JobCards = () => {
           vehiclesData,
           complaintsData,
           inspectionsData,
+          DriverData,
+          EmployeesData,
         ] = await Promise.all([
           getJobCards(),
           getVehicles(),
           getComplaints(),
           getInspections(),
+          getDrivers(),
+          getEmployees(),
         ]);
-
         setJobCards(
           jobCardsData
         );
@@ -120,6 +119,9 @@ const JobCards = () => {
           inspectionsData
         );
 
+        setDrivers(DriverData);
+
+        setEmployees(EmployeesData);
       } catch (error) {
 
         console.error(error);
@@ -179,58 +181,103 @@ const JobCards = () => {
 
         active_flag:
           record.active_flag,
+        driver_id:
+  record.driver_id,
+
+  technician1_id:
+    record.technician1_id,
+
+  technician2_id:
+    record.technician2_id,
+
+  date_time_in:
+    record.date_time_in
+      ? dayjs(record.date_time_in)
+      : null,
+
+  date_time_out:
+    record.date_time_out
+      ? dayjs(record.date_time_out)
+      : null,
+
+  zone_area:
+    record.zone_area,
+
+  mileage_hours:
+    record.mileage_hours,
+
+  maintenance_type:
+    record.maintenance_type,
+
+  issue_reported:
+    record.issue_reported,
+
+  problem_found_action_taken:
+    record.problem_found_action_taken,
+
+  requisition_slip_number:
+    record.requisition_slip_number,
       });
 
       setModalOpen(true);
     };
 
-  const handleSubmit =
-    async () => {
+const handleSubmit =
+  async () => {
 
-      try {
+    try {
 
-        const values =
-          await form.validateFields();
+      const values =
+        await form.validateFields();
 
-        if (
-          editingJobCard
-        ) {
+      const payload = {
 
-          await updateJobCard(
-            editingJobCard.job_card_id,
-            values
-          );
+        ...values,
 
-          message.success(
-            "Job card updated successfully"
-          );
+        date_time_in:
+          values.date_time_in
+            ? values.date_time_in?.toISOString()
+            : null,
 
-        } else {
+        date_time_out:
+          values.date_time_out
+            ? values.date_time_out?.toISOString()
+            : null,
+      };
 
-          await createJobCard(
-            values
-          );
+      if (
+        editingJobCard
+      ) {
 
-          message.success(
-            "Job card created successfully"
-          );
-        }
+        await updateJobCard(
+          editingJobCard.job_card_id,
+          payload
+        );
 
-        setModalOpen(false);
+      } else {
 
-        form.resetFields();
-
-        await loadData();
-
-      } catch (error) {
-
-        console.error(error);
-
-        message.error(
-          "Operation failed"
+        await createJobCard(
+          payload
         );
       }
-    };
+
+      message.success(
+        "Job Card saved successfully"
+      );
+
+      setModalOpen(false);
+
+      await loadData();
+
+    } catch (error) {
+
+      console.error(error);
+
+      message.error(
+        "Operation failed"
+      );
+    }
+  };
 
   const handleDeactivate =
     async (
@@ -328,6 +375,24 @@ const JobCards = () => {
         ]
       )
     );
+            const driverMap =
+          Object.fromEntries(
+            drivers.map(
+              (driver) => [
+                driver.driver_id,
+                driver.driver_name,
+              ]
+            )
+          );
+        const technicianMap =
+          Object.fromEntries(
+            employees.map(
+              (employee) => [
+                employee.employee_id,
+                employee.full_name,
+              ]
+            )
+          );
 
   const columns = [
 
@@ -349,6 +414,32 @@ const JobCards = () => {
           vehicleMap[
             record.vehicle_id
           ] ?? "-",
+    },
+    {
+      title: "Driver",
+
+      render:
+        (_, record) =>
+          driverMap[
+            record.driver_id
+          ] ?? "-",
+    },
+
+    {
+      title: "Technician",
+    
+      render:
+        (_, record) =>
+          technicianMap[
+            record.technician1_id
+          ] ?? "-",
+    },
+
+    {
+      title: "Maintenance Type",
+    
+      dataIndex:
+        "maintenance_type",
     },
 
     {
@@ -542,7 +633,129 @@ const JobCards = () => {
               }
             />
           </Form.Item>
-
+<Form.Item
+  label="Driver"
+  name="driver_id"
+>
+  <Select
+    allowClear
+    options={
+      drivers.map(
+        (driver) => ({
+          label:
+            driver.driver_name,
+          value:
+            driver.driver_id,
+        })
+      )
+    }
+  />
+</Form.Item>
+<Form.Item
+  label="Technician 1"
+  name="technician1_id"
+>
+  <Select
+    allowClear
+    options={
+      employees.map(
+        (employee) => ({
+          label:
+            employee.full_name,
+          value:
+            employee.employee_id,
+        })
+      )
+    }
+  />
+</Form.Item>
+<Form.Item
+  label="Technician 2"
+  name="technician2_id"
+>
+  <Select
+    allowClear
+    options={
+      employees.map(
+        (employee) => ({
+          label:
+            employee.full_name,
+          value:
+            employee.employee_id,
+        })
+      )
+    }
+  />
+</Form.Item>
+<Form.Item
+  label="Date Time In"
+  name="date_time_in"
+>
+  <DatePicker
+    showTime
+    style={{
+      width: "100%",
+    }}
+  />
+</Form.Item>
+<Form.Item
+  label="Date Time Out"
+  name="date_time_out"
+>
+  <DatePicker
+    showTime
+    style={{
+      width: "100%",
+    }}
+  />
+</Form.Item>
+<Form.Item
+  label="Zone / Area"
+  name="zone_area"
+>
+  <Input />
+</Form.Item>
+<Form.Item
+  label="Mileage / Hours"
+  name="mileage_hours"
+>
+  <Input />
+</Form.Item>
+<Form.Item
+  label="Maintenance Type"
+  name="maintenance_type"
+>
+  <Select
+    options={[
+      {
+        label: "REGULAR",
+        value: "REGULAR",
+      },
+      {
+        label: "PREVENTIVE",
+        value: "PREVENTIVE",
+      },
+    ]}
+  />
+</Form.Item>
+<Form.Item
+  label="Issue Reported"
+  name="issue_reported"
+>
+  <Input.TextArea rows={3} />
+</Form.Item>
+<Form.Item
+  label="Problems Found & Action Taken"
+  name="problem_found_action_taken"
+>
+  <Input.TextArea rows={4} />
+</Form.Item>
+<Form.Item
+  label="Requisition Slip Number"
+  name="requisition_slip_number"
+>
+  <Input />
+</Form.Item>
           <Form.Item
             label="Complaint"
             name="complaint_id"

@@ -41,15 +41,17 @@ import {
   getJobCards,
 } from "../services/jobCardService";
 
-import apiClient
-  from "../api/apiClient";
+import {
+  getParts,
+} from "../services/partService";
 
 const { Title } =
   Typography;
 
+
 const JobCardParts = () => {
 
-  const [jobCardParts,
+const [jobCardParts,
     setJobCardParts] =
     useState([]);
 
@@ -84,52 +86,47 @@ const JobCardParts = () => {
   const [form] =
     Form.useForm();
 
-  const loadData =
-    async () => {
+const loadData = async () => {
 
-      try {
+  try {
 
-        setLoading(true);
+    setLoading(true);
 
-        const [
-          jobCardPartData,
-          jobCardData,
-        ] = await Promise.all([
-          getJobCardParts(),
-          getJobCards(),
-        ]);
+    const [
+      jobCardPartData,
+      jobCardData,
+      partsData,
+    ] = await Promise.all([
+      getJobCardParts(),
+      getJobCards(),
+      getParts(),
+    ]);
 
-        const partResponse =setParts([]);
-//          await apiClient.get(
-//            "/jobcard-parts"
-//          );
+    setJobCardParts(
+      jobCardPartData
+    );
 
-        setJobCardParts(
-          jobCardPartData
-        );
+    setJobCards(
+      jobCardData
+    );
 
-        setJobCards(
-          jobCardData
-        );
+    setParts(
+      partsData
+    );
 
-        setParts(
-          partResponse.data
-        );
-console.log(parts);
-      } catch (error) {
+  } catch (error) {
 
-        console.error(error);
+    console.error(error);
 
-        message.error(
-          "Failed to load Job Card Parts"
-        );
+    message.error(
+      "Failed to load Job Card Parts"
+    );
 
-      } finally {
+  } finally {
 
-        setLoading(false);
-      }
-    };
-
+    setLoading(false);
+  }
+};
   useEffect(() => {
     loadData();
   }, []);
@@ -146,6 +143,7 @@ console.log(parts);
       form.setFieldsValue({
         active_flag: true,
         quantity: 1,
+        unit_price: 0,
       });
 
       setModalOpen(true);
@@ -167,6 +165,8 @@ console.log(parts);
 
         quantity:
           record.quantity,
+        unit_price:
+          record.unit_price,
 
         active_flag:
           record.active_flag,
@@ -328,7 +328,16 @@ console.log(values);
       dataIndex:
         "quantity",
     },
-
+    {
+      title: "Unit Price",
+        
+      dataIndex:
+        "unit_price",
+        
+      render:
+        (value) =>
+          `₹ ${value ?? 0}`,
+    },
     {
       title:
         "Status",
@@ -505,7 +514,23 @@ console.log(values);
               }}
             />
           </Form.Item>
-
+          <Form.Item
+            label="Unit Price"
+            name="unit_price"
+            rules={[
+              {
+                required: true,
+                message: "Unit Price is required",
+              },
+            ]}
+          >
+            <InputNumber
+              min={0}
+              style={{
+                width: "100%",
+              }}
+            />
+          </Form.Item>
           <Form.Item
             label="Active"
             name="active_flag"
