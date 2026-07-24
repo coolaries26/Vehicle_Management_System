@@ -1,6 +1,4 @@
-from fastapi.testclient import (
-    TestClient,
-)
+from fastapi.testclient import (    TestClient,) #type: ignore
 
 from app.main import app
 client = TestClient(app)
@@ -271,3 +269,51 @@ def test_create_jobcard_extended_fields():
         == "REQ-1001"
     )
 
+def test_create_jobcard_approval_fields():
+    vehicle = create_vehicle()
+    complaint = create_complaint()
+    inspection =  create_inspection()
+    driver = create_driver()
+    technician_1 = create_employee()
+    technician_2 = create_employee()
+    technician_3 = create_employee()
+    
+    assert vehicle["vehicle_id"] is not None
+    assert complaint["complaint_id"] is not None
+    assert inspection["inspection_id"] is not None
+    assert driver["driver_id"] is not None
+    assert technician_1["employee_id"] is not None
+    payload = {
+        "vehicle_id": vehicle["vehicle_id"],
+        "complaint_id": complaint["complaint_id"],
+        "inspection_id": inspection["inspection_id"],
+        "driver_id": driver["driver_id"],
+
+        "requested_by_employee_id": technician_1["employee_id"],
+        "verified_by_employee_id": technician_2["employee_id"],
+        "approved_by_employee_id":  technician_3["employee_id"],
+
+        "job_status":
+            "IN_PROGRESS",
+    }
+
+    response = client.post(
+        "/api/v1/jobcards",
+        json=payload,
+    )
+
+    assert response.status_code == 201
+
+    result = response.json()
+
+    assert (
+        result[
+            "requested_by_employee_id"
+        ]
+        == technician_1["employee_id"]
+    )
+
+    assert (
+        result["job_status"]
+        == "IN_PROGRESS"
+    )

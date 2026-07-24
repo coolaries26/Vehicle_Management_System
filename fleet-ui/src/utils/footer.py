@@ -1,10 +1,3 @@
-import logging
-
-logging.basicConfig(level=logging.INFO)
-
-def log(msg):
-    logging.info(msg)
-
 from datetime import datetime
 
 from reportlab.lib import colors

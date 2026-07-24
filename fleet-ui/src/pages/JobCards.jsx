@@ -40,7 +40,7 @@ import {  getInspections,} from "../services/inspectionService";
 import {  getDrivers,} from "../services/driverService";
 
 import {  getEmployees,} from "../services/employeeService";
-
+import {  Link,} from "react-router-dom";
 const { Title } = Typography;
 
 const JobCards = () => {
@@ -192,12 +192,12 @@ const JobCards = () => {
 
   date_time_in:
     record.date_time_in
-      ? dayjs(record.date_time_in)
+      ? dayjs(jobCard.date_time_in).format("DD-MMM-YYYY HH:mm")
       : null,
 
   date_time_out:
     record.date_time_out
-      ? dayjs(record.date_time_out)
+      ? dayjs(record.date_time_out).format("DD-MMM-YYYY HH:mm")
       : null,
 
   zone_area:
@@ -505,6 +505,13 @@ const handleSubmit =
 
           <Space>
 
+            <Link
+              to={`/jobcards/${record.job_card_id}`}
+            >
+              <Button>
+                View
+              </Button>
+            </Link>
             <Button
               icon={
                 <EditOutlined />

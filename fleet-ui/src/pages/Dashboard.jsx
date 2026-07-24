@@ -350,16 +350,13 @@ const getAuditOperation = (
           Maintenance Operations Overview
         </div>
       </Card>
-      <Space
+    <Space
         direction="vertical"
         size="large"
         style={{ width: "100%" }}
       >
-
         {/* Fleet Metrics */}
-
         <Row gutter={[16, 16]}>
-
           <Col span={6}>
             <Card
               hoverable
@@ -666,6 +663,7 @@ const getAuditOperation = (
               }}
               >
                 Audit Activity
+              </Title>
               <Title level={4}
                 style={{
                 marginBottom: 0,
@@ -677,7 +675,6 @@ const getAuditOperation = (
                   title="Total Audit Events"
                   value={counts.auditEvents}
                 />
-              </Title>
               </Title>
 {/*
               <Row gutter={[2, 2]}>

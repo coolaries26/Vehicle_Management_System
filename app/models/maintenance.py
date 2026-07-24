@@ -182,7 +182,22 @@ class MaintenanceJobCard(
     issue_reported: Mapped[str | None] = mapped_column(
         Text
     )
-
+    requested_by_employee_id: Mapped[int | None] = mapped_column(
+        ForeignKey("master.employee_master.employee_id")
+    )
+    
+    verified_by_employee_id: Mapped[int | None] = mapped_column(
+        ForeignKey("master.employee_master.employee_id")
+    )
+    
+    approved_by_employee_id: Mapped[int | None] = mapped_column(
+        ForeignKey("master.employee_master.employee_id")
+    )
+    
+    job_status: Mapped[str | None] = mapped_column(
+        String(50),
+        default="OPEN"
+    )
     problem_found_action_taken: Mapped[
         str | None
     ] = mapped_column(Text)

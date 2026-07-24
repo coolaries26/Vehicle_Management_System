@@ -27,12 +27,16 @@ class JobCardCreate(BaseModel):
     issue_reported: str | None = None
     problem_found_action_taken: str | None = None
     requisition_slip_number: str | None = None
+    requested_by_employee_id: int | None = None
+    verified_by_employee_id: int | None = None
+    approved_by_employee_id: int | None = None
+    job_status: str | None = "OPEN"
 
 #Update
 class JobCardUpdate(BaseModel):
     severity_id: int | None = None
     labour_charges: float | None = None
-    job_status: str | None = None
+    job_status: str | None = "OPEN"
     job_card_status: str | None = None
     description: str | None = None
     downtime_hours: float | None = None
@@ -50,6 +54,9 @@ class JobCardUpdate(BaseModel):
     issue_reported: str | None = None
     problem_found_action_taken: str | None = None
     requisition_slip_number: str | None = None
+    requested_by_employee_id: int | None = None
+    verified_by_employee_id: int | None = None
+    approved_by_employee_id: int | None = None
 
 
 
@@ -69,6 +76,10 @@ class JobCardResponse(BaseModel):
     maintenance_type_id: int | None = None
     severity_id: int | None = None
     completion_date: date | None = None
+    requested_by_employee_id: int | None = None
+    verified_by_employee_id: int | None = None
+    approved_by_employee_id: int | None = None
+    job_status: str | None = "OPEN"
     active_flag: bool | None = True
 
     created_by: int | None = None
@@ -87,3 +98,7 @@ class JobCardResponse(BaseModel):
     issue_reported: str | None = None
     problem_found_action_taken: str | None = None
     requisition_slip_number: str | None = None
+    requested_by_employee_id: int | None = None
+    verified_by_employee_id: int | None = None
+    approved_by_employee_id: int | None = None
+    job_status: str | None = "OPEN"

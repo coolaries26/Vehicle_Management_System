@@ -860,6 +860,84 @@ CREATE TABLE  IF NOT EXISTS  maintenance.checklist_result (
 -- );
 
 -- Fuel Rate Reference
+-- part_requisition
+CREATE TABLE transact.part_requisition
+(
+    requisition_id            BIGSERIAL PRIMARY KEY,
+
+    requisition_number        VARCHAR(50) UNIQUE,
+
+    requisition_date          TIMESTAMP NOT NULL,
+
+    vehicle_id               INTEGER NOT NULL,
+
+    job_card_id              INTEGER NOT NULL,
+
+    technician_id            INTEGER,
+
+    remarks                  TEXT,
+
+    status                   VARCHAR(30)
+                             DEFAULT 'OPEN',
+
+    active_flag              BOOLEAN
+                             DEFAULT TRUE,
+
+    created_at               TIMESTAMP
+                             DEFAULT CURRENT_TIMESTAMP,
+
+    modified_at              TIMESTAMP
+                             DEFAULT CURRENT_TIMESTAMP
+);
+--transact.part_requisition_detail
+CREATE TABLE transact.part_requisition_detail
+(
+    requisition_detail_id     BIGSERIAL PRIMARY KEY,
+
+    requisition_id           BIGINT NOT NULL,
+
+    part_id                  INTEGER NOT NULL,
+
+    quantity_required        NUMERIC(10,2),
+
+    quantity_returned        NUMERIC(10,2),
+
+    required_serial_number   VARCHAR(200),
+
+    returned_serial_number   VARCHAR(200),
+
+    remarks                  TEXT,
+
+    active_flag             BOOLEAN
+                            DEFAULT TRUE
+);
+
+ALTER TABLE transact.part_requisition
+ADD CONSTRAINT fk_req_vehicle
+FOREIGN KEY (vehicle_id)
+REFERENCES master.vehicle_master(vehicle_id);
+
+ALTER TABLE transact.part_requisition
+ADD CONSTRAINT fk_req_jobcard
+FOREIGN KEY (job_card_id)
+REFERENCES transact.maintenance_job_card(job_card_id);
+
+ALTER TABLE transact.part_requisition
+ADD CONSTRAINT fk_req_technician
+FOREIGN KEY (technician_id)
+REFERENCES master.employee_master(employee_id);
+
+ALTER TABLE transact.part_requisition_detail
+ADD CONSTRAINT fk_reqdetail_header
+FOREIGN KEY (requisition_id)
+REFERENCES transact.part_requisition(requisition_id);
+
+ALTER TABLE transact.part_requisition_detail
+ADD CONSTRAINT fk_reqdetail_part
+FOREIGN KEY (part_id)
+REFERENCES inventory.part_master(part_id);
+
+
 CREATE TABLE IF NOT EXISTS reference.fuel_rate_reference (
     id SERIAL PRIMARY KEY,
     fuel_type_id SMALLINT NOT NULL
@@ -1032,6 +1110,8 @@ BEGIN
                 to_jsonb(NEW)->>'checklist_id',
                 to_jsonb(NEW)->>'part_id',
                 to_jsonb(NEW)->>'id'
+                to_jsonb(NEW)->>'requisition_id'
+                to_jsonb(NEW)->>'requisition_detail_id'
             );
     END IF;
     INSERT INTO audit.audit_log
@@ -1070,73 +1150,85 @@ $function$;
 
 -- adding constriants for fk integrity
 ALTER TABLE transact.maintenance_job_card
-ALTER COLUMN inspection_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS inspection_id SET NOT NULL;
 
 ALTER TABLE transact.maintenance_job_card
-ALTER COLUMN complaint_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS complaint_id SET NOT NULL;
 
 ALTER TABLE transact.maintenance_job_card
-ALTER COLUMN vehicle_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS vehicle_id SET NOT NULL;
 
 ALTER TABLE maintenance.vehicle_complaint
-ALTER COLUMN vehicle_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS vehicle_id SET NOT NULL;
 
 ALTER TABLE maintenance.vehicle_complaint
-ALTER COLUMN driver_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS driver_id SET NOT NULL;
 
 ALTER TABLE maintenance.technician_inspection
-ALTER COLUMN complaint_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS complaint_id SET NOT NULL;
 
 ALTER TABLE transact.maintenance_job_card
-ALTER COLUMN complaint_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS complaint_id SET NOT NULL;
 
 ALTER TABLE transact.maintenance_job_card
-ALTER COLUMN inspection_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS inspection_id SET NOT NULL;
 
 ALTER TABLE transact.maintenance_job_card
-ALTER COLUMN vehicle_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS vehicle_id SET NOT NULL;
 
 ALTER TABLE maintenance.job_card_part
-ALTER COLUMN job_card_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS job_card_id SET NOT NULL;
 
 ALTER TABLE maintenance.job_card_part
-ALTER COLUMN part_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS part_id SET NOT NULL;
 
 ALTER TABLE maintenance.preventive_maintenance_checklist
-ALTER COLUMN vehicle_id SET NOT NULL;
+ALTER COLUMN IF NOT EXISTS vehicle_id SET NOT NULL;
 -- adding column for enhaning job card 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN driver_id INTEGER;
+ADD COLUMN IF NOT EXISTS driver_id INTEGER;
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN technician1_id INTEGER;
+ADD COLUMN IF NOT EXISTS technician1_id INTEGER;
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN technician2_id INTEGER;
+ADD COLUMN IF NOT EXISTS technician2_id INTEGER;
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN date_time_in TIMESTAMP;
+ADD COLUMN IF NOT EXISTS date_time_in TIMESTAMP;
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN date_time_out TIMESTAMP;
+ADD COLUMN IF NOT EXISTS date_time_out TIMESTAMP;
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN zone_area VARCHAR(200);
+ADD COLUMN IF NOT EXISTS zone_area VARCHAR(200);
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN mileage_hours VARCHAR(100);
+ADD COLUMN IF NOT EXISTS mileage_hours VARCHAR(100);
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN maintenance_type VARCHAR(50);
+ADD COLUMN IF NOT EXISTS maintenance_type VARCHAR(50);
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN issue_reported TEXT;
+ADD COLUMN IF NOT EXISTS issue_reported TEXT;
 
 ALTER TABLE transact.maintenance_job_card
-ADD COLUMN problem_found_action_taken TEXT;
+ADD COLUMN IF NOT EXISTS problem_found_action_taken TEXT;
 
 ALTER TABLE transact.maintenance_job_card
 ADD COLUMN requisition_slip_number VARCHAR(100);
+ALTER TABLE transact.maintenance_job_card
+ADD IF NOT EXISTS COLUMN requested_by_employee_id INTEGER;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN IF NOT EXISTS verified_by_employee_id INTEGER;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN  IF NOT EXISTS approved_by_employee_id INTEGER;
+
+ALTER TABLE transact.maintenance_job_card
+ADD COLUMN IF NOT EXISTS job_status VARCHAR(50)
+DEFAULT 'OPEN';
 -- adding fk for job card new columns
 ALTER TABLE transact.maintenance_job_card
 ADD CONSTRAINT fk_jobcard_driver
@@ -1152,6 +1244,32 @@ ALTER TABLE transact.maintenance_job_card
 ADD CONSTRAINT fk_jobcard_technician2
 FOREIGN KEY (technician2_id)
 REFERENCES master.employee_master(employee_id);
+ALTER TABLE transact.maintenance_job_card
+ADD CONSTRAINT fk_jobcard_requested_by
+FOREIGN KEY (
+    requested_by_employee_id
+)
+REFERENCES master.employee_master(
+    employee_id
+);
+
+ALTER TABLE transact.maintenance_job_card
+ADD CONSTRAINT fk_jobcard_verified_by
+FOREIGN KEY (
+    verified_by_employee_id
+)
+REFERENCES master.employee_master(
+    employee_id
+);
+
+ALTER TABLE transact.maintenance_job_card
+ADD CONSTRAINT fk_jobcard_approved_by
+FOREIGN KEY (
+    approved_by_employee_id
+)
+REFERENCES master.employee_master(
+    employee_id
+);
 
 -- adding column for auditing
 ALTER TABLE maintenance.technician_inspection
@@ -1435,6 +1553,19 @@ AFTER INSERT OR UPDATE OR DELETE
 ON inventory.part_master
 FOR EACH ROW
 EXECUTE FUNCTION audit.log_changes();
+--inventory part_detail
+CREATE TRIGGER trg_audit_part_requisition
+AFTER INSERT OR UPDATE
+ON transact.part_requisition
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+
+CREATE TRIGGER trg_audit_part_requisition_detail
+AFTER INSERT OR UPDATE
+ON transact.part_requisition_detail
+FOR EACH ROW
+EXECUTE FUNCTION audit.log_changes();
+
 
 
 --  CREATE TABLE IF NOT EXISTS master.fuel_station

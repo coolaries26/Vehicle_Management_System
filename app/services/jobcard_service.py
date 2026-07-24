@@ -65,7 +65,10 @@ class JobCardService:
                 issue_reported=payload.issue_reported,
                 problem_found_action_taken=payload.problem_found_action_taken,
                 requisition_slip_number=payload.requisition_slip_number,
-
+                requested_by_employee_id=payload.requested_by_employee_id,
+                verified_by_employee_id=payload.verified_by_employee_id,
+                approved_by_employee_id=payload.approved_by_employee_id,
+                job_status=payload.job_status,
             )
         )
 
@@ -104,6 +107,25 @@ class JobCardService:
         if payload.requisition_slip_number is not None:
             jobcard.requisition_slip_number = (
                 payload.requisition_slip_number
+            )
+        if payload.requested_by_employee_id is not None:
+            jobcard.requested_by_employee_id = (
+                payload.requested_by_employee_id
+            )
+        
+        if payload.verified_by_employee_id is not None:
+            jobcard.verified_by_employee_id = (
+                payload.verified_by_employee_id
+            )
+        
+        if payload.approved_by_employee_id is not None:
+            jobcard.approved_by_employee_id = (
+                payload.approved_by_employee_id
+            )
+        
+        if payload.job_status is not None:
+            jobcard.job_status = (
+                payload.job_status
             )
         return (
             self.jobcard_repo
